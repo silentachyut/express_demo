@@ -6,6 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expHbs = require('express-handlebars');
 
+//Database
+var db = require('./db');
+
+
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -30,6 +35,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+
+//Starting a db connection
+db.connect(db.MODE_PRODUCTION, function(err){
+  if(err){
+    console.log("Unable to connect to the datbase");
+    process.exit(1);
+  }
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
